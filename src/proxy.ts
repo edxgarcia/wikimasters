@@ -5,9 +5,14 @@ export default auth.middleware({
   loginUrl: "/auth/sign-in",
 });
 
+// export async function proxy() { console.log("proxy"); const session = await auth.getSession(); console.log({ session });
+//   if (!session.data) {
+//   }
+// }
+
 export const config = {
   matcher: [
     // Protected routes requiring authentication
-    "/account/:path*",
+    "/wiki/:path*",
   ],
 };

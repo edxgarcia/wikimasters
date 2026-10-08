@@ -22,3 +22,10 @@ test("Sign Up button navigates to signup page", async ({ page }) => {
   await page.getByRole("link", { name: "Sign Up" }).click();
   await expect(page).toHaveURL("/auth/sign-up");
 });
+
+test("Protected routes redirect unauthenticated users to sing-in", async ({
+  page,
+}) => {
+  await page.goto("/wiki/1");
+  await expect(page).toHaveURL("/auth/sign-in");
+});

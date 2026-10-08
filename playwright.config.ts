@@ -1,4 +1,5 @@
-import { defineConfig, devices } from "@playwright/test";
+import { resolve } from "node:path";
+import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./tests",
@@ -12,8 +13,20 @@ export default defineConfig({
   },
   projects: [
     {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      name: "public",
+      testMatch: "tests/public/**",
+    },
+    {
+      name: "authenticate",
+      testMatch: "tests/setup.auth.ts",
+    },
+    {
+      name: "protectedRoutes",
+      testMatch: "tests/protected/**",
+      use: {
+        storageState: resolve("playwright/.auth/user.json"),
+      },
+      dependencies: ["authenticate"],
     },
   ],
   reporter: [
