@@ -1,4 +1,3 @@
-import { UserAvatar, UserButton } from "@neondatabase/auth/react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,12 +6,14 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import { auth } from "@/lib/auth/server";
+import { UserMenu } from "./userMenu";
 
 // Server components using auth methods must be rendered dynamically
 export const dynamic = "force-dynamic";
 
 export async function NavBar() {
   const session = await auth.getSession();
+  const email = session.data?.user.email;
   return (
     <nav className="w-full border-b bg-white/80 backdrop-blur supports-backdrop-filter:bg-white/60 sticky top-0 z-50">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -23,15 +24,12 @@ export async function NavBar() {
           >
             Wikimasters
           </Link>
-          <pre>{JSON.stringify(session, null, 2)}</pre>
         </div>
         <NavigationMenu>
           <NavigationMenuList className="flex items-center gap-2">
-            {session.data ? (
+            {session.data && email ? (
               <NavigationMenuItem>
-                {/*<UserButton />*/}
-                <UserAvatar />
-                User
+                <UserMenu email={email} />
               </NavigationMenuItem>
             ) : (
               <>

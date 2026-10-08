@@ -14,11 +14,11 @@ test("Navbar logo go to home page", async ({ page }) => {
 test("Sign in button navigates to signin page", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("link", { name: "Sign In" }).click();
-  await expect(page).toHaveURL("/signin");
+  await expect(page).toHaveURL("/auth/sign-in");
 });
 
 test("Sign Up button navigates to signup page", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("link", { name: "Sign Up" }).click();
-  await expect(page).toHaveURL("/signup");
+  await expect(page).toHaveURL("/auth/sign-up");
 });

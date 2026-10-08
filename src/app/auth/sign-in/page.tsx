@@ -1,69 +1,82 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import { signInWithEmail } from "@/server/actions/auth";
 
 export default function SignInForm() {
   const [state, formAction, isPending] = useActionState(signInWithEmail, null);
 
   return (
-    <form
-      action={formAction}
-      className="flex flex-col gap-5 min-h-screen items-center justify-center bg-gray-900"
-    >
-      <div className="w-sm">
-        <h1 className="mt-10 text-center text-2xl/9 font-bold text-white">
-          Sign in to your account
-        </h1>
-      </div>
-
-      <div className="flex flex-col gap-1.5 w-sm">
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium text-gray-100"
-        >
-          Email address
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          placeholder="john@my-company.com"
-          className="block rounded-md w-full bg-white/5 px-2 py-1.5 placeholder:text-gray-500 text-white outline-1 outline-white/10  focus:outline-indigo-500"
-        />
-      </div>
-
-      <div className="flex flex-col gap-1.5 w-sm">
-        <label
-          htmlFor="password"
-          className="block text-sm font-medium text-gray-100"
-        >
-          Password
-        </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          placeholder="*****"
-          className="block rounded-md w-full bg-white/5 px-2 py-1.5 placeholder:text-gray-500 text-white outline-1 outline-white/10  focus:outline-indigo-500"
-        />
-      </div>
-
-      {state?.error && (
-        <div className="rounded-md px-3 py-2 text-sm text-red-500">
-          {state.error}
-        </div>
-      )}
-
-      <button
-        type="submit"
-        disabled={isPending}
-        className="flex w-sm justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400"
-      >
-        Sign in
-      </button>
-    </form>
+    <main className="flex h-[calc(100svh-4.5rem)] items-center justify-center overflow-hidden px-4 py-6">
+      <Card className="w-full max-w-md shadow-sm">
+        <CardHeader className="gap-2">
+          <CardTitle className="text-2xl">Welcome back</CardTitle>
+          <CardDescription>Sign in to continue to Wikimasters.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form action={formAction} className="flex flex-col gap-6">
+            <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="email">Email address</FieldLabel>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  required
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  placeholder="Enter your password"
+                  required
+                />
+              </Field>
+            </FieldGroup>
+            {state?.error && <FieldError>{state.error}</FieldError>}
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full"
+              disabled={isPending}
+            >
+              {isPending ? "Signing in…" : "Sign in"}
+            </Button>
+          </form>
+        </CardContent>
+        <CardFooter className="justify-center border-t py-4 text-sm text-muted-foreground">
+          Don’t have an account?
+          <Link
+            href="/auth/sign-up"
+            className="font-medium ml-2 text-foreground underline-offset-4 hover:underline"
+          >
+            Sign up
+          </Link>
+        </CardFooter>
+      </Card>
+    </main>
   );
 }

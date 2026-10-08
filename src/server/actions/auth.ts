@@ -46,3 +46,15 @@ export async function signInWithEmail(
 
   redirect("/");
 }
+
+export async function signOut(_prevState: { error: string } | null) {
+  const { error } = await auth.signOut();
+
+  if (error) {
+    return {
+      error: error.message || "Failed to sign out. Try again",
+    };
+  }
+
+  redirect("/");
+}
