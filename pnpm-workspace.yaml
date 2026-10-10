@@ -1,5 +1,6 @@
 allowBuilds:
   core-js: true
+  esbuild: true
   lefthook: true
 minimumReleaseAgeExclude:
   - '@radix-ui/react-accessible-icon@1.1.16'

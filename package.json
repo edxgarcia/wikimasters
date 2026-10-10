@@ -11,13 +11,19 @@
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test",
     "test:ui": "pnpm exec playwright test --ui",
-    "test:codegen": "pnpm playwright codegen http://localhost:3000"
+    "test:codegen": "pnpm playwright codegen http://localhost:3000",
+    "db:seed": "tsx src/db/seed.ts",
+"db:generate": "drizzle-kit generate",
+"db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
     "@neondatabase/auth": "0.5.0-beta",
+    "@neondatabase/serverless": "^1.2.0",
     "@uiw/react-md-editor": "^4.1.2",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.4.0",
+    "dotenv": "^18.0.6",
+    "drizzle-orm": "^0.45.4",
     "lucide-react": "^1.52.0",
     "next": "16.3.8",
     "radix-ui": "^1.7.0",
@@ -36,8 +42,11 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
+    "drizzle-kit": "^0.31.11",
+    "drizzle-seed": "^0.3.1",
     "lefthook": "^2.2.1",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }
