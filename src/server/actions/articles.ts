@@ -32,6 +32,7 @@ export async function createArticle(data: CreateArticleInput) {
     slug: `${data.title}-${Date.now()}`,
     published: true,
     authorId: session.data.user.id,
+    imageUrl: data.imageUrl ?? undefined,
   });
 
   console.log("✨ createArticle called:", data);
@@ -50,7 +51,11 @@ export async function updateArticle(id: string, data: UpdateArticleInput) {
 
   await db
     .update(articles)
-    .set({ title: data.title, content: data.content })
+    .set({
+      title: data.title,
+      content: data.content,
+      imageUrl: data.imageUrl ?? undefined,
+    })
     .where(eq(articles.id, Number(id)));
 
   console.log("📝 updateArticle called:", { id, ...data });
