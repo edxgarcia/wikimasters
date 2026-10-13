@@ -2,6 +2,7 @@
 
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import redis from "@/cache";
 import { db } from "@/db";
 import { authorizeUserToEditArticle } from "@/db/authz";
 import { articles } from "@/db/schema";
@@ -34,6 +35,8 @@ export async function createArticle(data: CreateArticleInput) {
     authorId: session.data.user.id,
     imageUrl: data.imageUrl ?? undefined,
   });
+
+  redis.del("articles:all");
 
   console.log("✨ createArticle called:", data);
   return { success: true, message: "Article create logged (stub)" };

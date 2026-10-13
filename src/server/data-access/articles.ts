@@ -1,8 +1,26 @@
 import { eq } from "drizzle-orm";
+import redis from "@/cache";
 import { db } from "@/db";
 import { articles, users } from "@/db/schema";
 
-export async function getArticles() {
+type ArticlesView = {
+  title: string;
+  id: number;
+  createdAt: string;
+  content: string;
+  author: string | null;
+}[];
+
+export async function getArticles(): Promise<ArticlesView> {
+  const cached = await redis.get("articles:all");
+
+  if (cached) {
+    console.log("Get Articles Cache Hit!");
+    return cached as ArticlesView;
+  }
+
+  console.log("Get Articles Cache Miss!");
+
   const articlesData = await db
     .select({
       title: articles.title,
@@ -13,6 +31,10 @@ export async function getArticles() {
     })
     .from(articles)
     .leftJoin(users, eq(articles.authorId, users.id));
+
+  redis.set("articles:all", articlesData, {
+    ex: 60,
+  });
 
   return articlesData;
 }
