@@ -1,6 +1,11 @@
 "use server";
 
+import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import { db } from "@/db";
+import { authorizeUserToEditArticle } from "@/db/authz";
+import { articles } from "@/db/schema";
+import { auth } from "@/lib/auth/server";
 
 export type CreateArticleInput = {
   title: string;
@@ -16,20 +21,55 @@ export type UpdateArticleInput = {
 };
 
 export async function createArticle(data: CreateArticleInput) {
-  // TODO: Replace with actual database call
+  const session = await auth.getSession();
+  if (!session.data || !session.data.user) {
+    throw new Error("Unauthorized");
+  }
+
+  await db.insert(articles).values({
+    title: data.title,
+    content: data.content,
+    slug: `${data.title}-${Date.now()}`,
+    published: true,
+    authorId: session.data.user.id,
+  });
+
   console.log("✨ createArticle called:", data);
   return { success: true, message: "Article create logged (stub)" };
 }
 
 export async function updateArticle(id: string, data: UpdateArticleInput) {
-  // TODO: Replace with actual database update
+  const session = await auth.getSession();
+  if (!session.data || !session.data.user) {
+    throw new Error("Unauthorized");
+  }
+
+  if (!(await authorizeUserToEditArticle(session.data.user.id, Number(id)))) {
+    throw new Error("Forbidden");
+  }
+
+  await db
+    .update(articles)
+    .set({ title: data.title, content: data.content })
+    .where(eq(articles.id, Number(id)));
+
   console.log("📝 updateArticle called:", { id, ...data });
   return { success: true, message: `Article ${id} update logged (stub)` };
 }
 
 export async function deleteArticle(id: string) {
-  // TODO: Replace with actual database delete
+  const session = await auth.getSession();
+  if (!session.data || !session.data.user) {
+    throw new Error("Unauthorized");
+  }
+
+  if (!(await authorizeUserToEditArticle(session.data.user.id, Number(id)))) {
+    throw new Error("Forbidden");
+  }
   console.log("🗑️ deleteArticle called:", id);
+
+  await db.delete(articles).where(eq(articles.id, Number(id)));
+
   return { success: true, message: `Article ${id} delete logged (stub)` };
 }
 

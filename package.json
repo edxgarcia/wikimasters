@@ -13,8 +13,8 @@
     "test:ui": "pnpm exec playwright test --ui",
     "test:codegen": "pnpm playwright codegen http://localhost:3000",
     "db:seed": "tsx src/db/seed.ts",
-"db:generate": "drizzle-kit generate",
-"db:migrate": "drizzle-kit migrate"
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
     "@neondatabase/auth": "0.5.0-beta",

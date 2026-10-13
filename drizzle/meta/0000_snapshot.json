@@ -72,12 +72,8 @@
           "tableFrom": "articles",
           "tableTo": "user",
           "schemaTo": "neon_auth",
-          "columnsFrom": [
-            "author_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["author_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
