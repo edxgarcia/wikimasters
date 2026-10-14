@@ -25,9 +25,10 @@ export const articles = pgTable("articles", {
   published: boolean().notNull(),
   authorId: uuid("author_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "string" }).defaultNow().notNull(),
+  summary: text("summary"),
 });
 
 const schema = { articles, users };
