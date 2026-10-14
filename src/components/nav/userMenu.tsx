@@ -2,9 +2,13 @@
 
 import { LogOutIcon, UserRoundIcon } from "lucide-react";
 import { useActionState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { signOut } from "@/server/actions/auth";
-import { Button } from "./ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 interface UserMenuProps {
   email: string;
