@@ -2,6 +2,7 @@
 
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import { summarizeArticle } from "@/ai/summarize";
 import redis from "@/cache";
 import { db } from "@/db";
 import { authorizeUserToEditArticle } from "@/db/authz";
@@ -27,6 +28,8 @@ export async function createArticle(data: CreateArticleInput) {
     throw new Error("Unauthorized");
   }
 
+  const summary = await summarizeArticle(data.title || "", data.content || "");
+
   await db.insert(articles).values({
     title: data.title,
     content: data.content,
@@ -34,6 +37,7 @@ export async function createArticle(data: CreateArticleInput) {
     published: true,
     authorId: session.data.user.id,
     imageUrl: data.imageUrl ?? undefined,
+    summary,
   });
 
   redis.del("articles:all");
@@ -52,12 +56,15 @@ export async function updateArticle(id: string, data: UpdateArticleInput) {
     throw new Error("Forbidden");
   }
 
+  const summary = await summarizeArticle(data.title || "", data.content || "");
+
   await db
     .update(articles)
     .set({
       title: data.title,
       content: data.content,
       imageUrl: data.imageUrl ?? undefined,
+      summary: summary ? summary : undefined,
     })
     .where(eq(articles.id, Number(id)));
 

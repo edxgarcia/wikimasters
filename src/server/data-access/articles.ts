@@ -9,6 +9,7 @@ type ArticlesView = {
   createdAt: string;
   content: string;
   author: string | null;
+  summary: string | null;
 }[];
 
 export async function getArticles(): Promise<ArticlesView> {
@@ -28,6 +29,7 @@ export async function getArticles(): Promise<ArticlesView> {
       createdAt: articles.createdAt,
       content: articles.content,
       author: users.name,
+      summary: articles.summary,
     })
     .from(articles)
     .leftJoin(users, eq(articles.authorId, users.id));
