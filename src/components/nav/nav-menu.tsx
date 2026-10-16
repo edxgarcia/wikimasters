@@ -1,5 +1,6 @@
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
+import { connection } from "next/server";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -9,10 +10,10 @@ import {
 import { auth } from "@/lib/auth/server";
 import { UserMenu } from "./userMenu";
 
-// Server components using auth methods must be rendered dynamically
 export const dynamic = "force-dynamic";
 
 export async function NavMenu() {
+  await connection(); // this component becomes dynamic
   const session = await auth.getSession();
   const user = session.data?.user;
   return (
