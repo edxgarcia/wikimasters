@@ -56,7 +56,9 @@ export async function updateArticle(id: string, data: UpdateArticleInput) {
     throw new Error("Forbidden");
   }
 
-  const summary = await summarizeArticle(data.title || "", data.content || "");
+  // Only works in local
+  // const summary = await summarizeArticle(data.title || "", data.content || "");
+  const summary = undefined;
 
   await db
     .update(articles)
